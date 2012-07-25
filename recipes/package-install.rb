@@ -30,6 +30,12 @@ when "debian","ubuntu"
     deb_src false
   end
 
+# Kludge for Debian bug 681549. Should be obsolete by the end of July 2012
+# http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=681549
+  directory "/var/run/couchdb/" do
+    mode 0777
+  end
+
   package "couchdb" do
     action :install
   end
@@ -38,22 +44,13 @@ when "debian","ubuntu"
     action :install
   end
   
-  bash "enable solr-jetty" do
-    user "root"
-    code <<-EOH
-    sed -i -r "s/NO_START=1/NO_START=0/g" /etc/default/jetty
-    EOH
-  end
-  
-  service "jetty" do
-    supports :status => true, :restart => true
-    action :restart
-  end
-
   package "rabbitmq-server" do
     action :install
   end
-  
+
+  package "chef-server" do
+    action :install
+  end  
 
 else
   log("Package installation for #{node['lsb']['codename']} platform is not supported.")
