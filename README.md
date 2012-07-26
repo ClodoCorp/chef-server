@@ -169,6 +169,14 @@ Port for the Server WebUI service to listen on. Default `4040`.
 
 As of version 0.8.x+, the WebUI part of the Chef Server is optional, and disabled by default. To enable it, set this to true.
 
+### webui\_password
+
+Password for webui's admin user.
+
+### amqp_pasword
+
+Password for RabbitMQ access
+
 ### solr\_heap\_size
 
 Sets the amount of memory for the SOLR heap, default 256M.

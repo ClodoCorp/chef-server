@@ -40,8 +40,25 @@ when "debian","ubuntu"
     action :install
   end
 
+  service "couchdb" do
+    supports :status => true, :restart => true
+    action [ :enable, :start ]
+  end
+
   package "solr-jetty" do
     action :install
+  end
+
+  bash "enable solr-jetty" do
+    user "root"
+    code <<-EOH
+    sed -i -r "s/NO_START=1/NO_START=0/g" /etc/default/jetty
+    EOH
+  end
+  
+  service "jetty" do
+    supports :status => true, :restart => true
+    action [ :enable, :start ]
   end
   
   package "rabbitmq-server" do
@@ -50,6 +67,7 @@ when "debian","ubuntu"
 
   package "chef-server" do
     action :install
+    response_file "chef-server.seed.erb"
   end  
 
 else
